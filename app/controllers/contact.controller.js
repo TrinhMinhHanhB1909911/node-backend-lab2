@@ -4,6 +4,8 @@ const ContactService = require("../services/contact.service");
 const MongoDB = require("../utils/mongodb.util");
 
 exports.create = async (req, res, next) => {
+    console.log(req.body);
+    console.log(req.url);
     if (!req.body?.name) {
         return next(new ApiError(400, 'Name can not be empty'));
     }
@@ -58,7 +60,7 @@ exports.update = async (req, res, next) => {
     }
 
     try {
-        const contactService = new contactService(MongoDB.client);
+        const contactService = new ContactService(MongoDB.client);
         const document = await contactService.update(req.params.id, req.body);
         if (!document) {
             return next(new ApiError(404, 'Contact not found'));
@@ -76,12 +78,12 @@ exports.delete = async (req, res, next) => {
     try {
         const contactService = new ContactService(MongoDB.client);
         const document = await contactService.extractContactDate(req.params.id);
-        if(!document) {
+        if (!document) {
             return next(
                 new ApiError(404, 'Contact not found')
             );
         }
-        return res.send({message: 'Contact was deleted successfully'});
+        return res.send({ message: 'Contact was deleted successfully' });
     } catch (error) {
         return next(
             new ApiError(500, `Could not delete contact with id=${req.params.id}`)
@@ -91,7 +93,7 @@ exports.delete = async (req, res, next) => {
 
 exports.deleteAll = async (req, res, next) => {
     try {
-        const contactService = new contactService(MongoDB.client);
+        const contactService = new ContactService(MongoDB.client);
         const deletedCount = await contactService.deleteAll();
         return res.send(
             {

@@ -2,8 +2,9 @@ const { ObjectId } = require('mongodb');
 
 class ContactService {
     constructor(client) {
-        this.Contact = client.db().conllection('contacts');
+        this.Contact = client.db().collection('contacts');
     }
+
 
     extractContactDate(payload) {
         const contact = {
@@ -14,15 +15,16 @@ class ContactService {
             favorite: payload.favorite,
         };
 
-        Objects.keys(contact).forEach(
-            (key) => contact[key] === undefined && delete contact[key]
-        );
+        // ObjectId.keys(contact).forEach(
+        //     (key) => contact[key] === undefined && delete contact[key]
+        // );
 
         return contact;
     }
 
     async create(payload) {
         const contact = this.extractContactDate(payload);
+       
         const result = await this.Contact.findOneAndUpdate(
             contact,
             { $set: { favorite: contact.favorite === true } },
