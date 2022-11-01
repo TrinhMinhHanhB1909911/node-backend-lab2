@@ -65,9 +65,9 @@ class ContactService {
     }
 
     async delete(id) {
-        const result = await this.Contact.findOneAndDelete(
+        const result = await this.Contact.deleteOne(
             {
-                _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+                _id: ObjectId.isValid(id) ? new ObjectId(id) : null
             }
         );
         return result.value;
